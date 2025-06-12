@@ -1,1 +1,13 @@
-
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+jupyterlab # If you plan to use notebooks
+openpyxl # If reading .xlsx
+dvc # For data version control
+xgboost # For Task 4 ML models
+shap # For model interpretability
+lime # For model interpretability
+scipy # For hypothesis testing
+joblib # For saving models
