@@ -1,0 +1,66 @@
+name: Python CI for EDA Pipeline
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events to the main branch
+  push:
+    branches: [ main ] # Or 'master', depending on your default branch name
+  pull_request:
+    branches: [ main ] # Or 'master'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build_and_run_eda:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest # Use the latest Ubuntu Linux runner
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout code
+      uses: actions/checkout@v4 # Recommended to use the latest stable version
+
+    # Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v5 # Recommended to use the latest stable version
+      with:
+        python-version: '3.9' # Specify the Python version you use (e.g., '3.9', '3.10', '3.11', '3.12')
+
+    # Install dependencies from requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # Create the output directory where plots will be saved
+    - name: Create output directory
+      run: |
+        mkdir -p output/eda_reports
+
+    # Run the EDA pipeline script
+    - name: Run EDA Pipeline
+      run: |
+        python scripts/run_eda_pipeline.py
+      env:
+        # You can set environment variables here if your scripts rely on them.
+        # For example, if your data path were an env var:
+        # RAW_DATA_PATH: './data/MachineLearning_v3.txt'
+
+    # Optional: Verify if key output files were created (a simple check)
+    - name: Verify EDA report generation
+      run: |
+        # List files in the output directory to confirm creation
+        ls -al output/eda_reports/
+
+        # More specific check: Fail if a critical output file is missing
+        # if [ ! -f "output/eda_reports/descriptive_stats.txt" ]; then
+        #   echo "Error: descriptive_stats.txt was not generated!"
+        #   exit 1
+        # fi
+        # if [ ! -f "output/eda_reports/correlation_matrix.png" ]; then
+        #   echo "Error: correlation_matrix.png was not generated!"
+        #   exit 1
+        # fi
