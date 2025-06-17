@@ -1,10 +1,45 @@
+# Python virtual environment
 .venv/
+
+# Data directory (this will ignore the actual data files, DVC tracks them)
 data/
+
+# macOS system files
 .DS_Store
+
+# Python compiled files
 __pycache__/
 *.pyc
+
+# Environment variables file
 .env
-*.csv.dvc
-*.dvc
+
+# DVC-related entries
+# Ignore .dvc files for individual tracked files (like data.csv.dvc)
+# This is usually desired, as DVC generates these.
+# We explicitly ensure it's NOT ignored.
+!.dvc/
+
+# The .dvc/config file within the .dvc/ directory should also be tracked.
+!.dvc/.gitignore
+!.dvc/config
+
+# Ignore the DVC cache directory (it stores the actual data).
+# This is often large and should not be versioned by Git directly.
 .dvc/cache/
+
+# Ignore DVC's local system files
+.dvc/tmp/
+.dvc/plots/
+.dvc/experiments/
+.dvcignore # This is similar to .gitignore but for DVC
+
+# EXCEPTION: Do NOT ignore the .dvc/ directory at the project root.
+# This directory contains DVC's internal configuration and pipeline files,
+# which MUST be tracked by Git for reproducibility.
+!.dvc/
+
+# Optional: You might want to ignore a specific 'output' directory
+# if you're not tracking its contents with DVC or Git.
+# If 'output' is managed by DVC or part of your Git repo, remove this line.
 output/
