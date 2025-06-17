@@ -1,0 +1,59 @@
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 1000098 entries, 0 to 1000097
+Data columns (total 52 columns):
+ #   Column                    Non-Null Count    Dtype         
+---  ------                    --------------    -----         
+ 0   UnderwrittenCoverID       1000098 non-null  object        
+ 1   PolicyID                  1000098 non-null  object        
+ 2   TransactionMonth          1000098 non-null  datetime64[ns]
+ 3   IsVATRegistered           1000098 non-null  object        
+ 4   Citizenship               1000098 non-null  object        
+ 5   LegalType                 1000098 non-null  object        
+ 6   Title                     1000098 non-null  object        
+ 7   Language                  1000098 non-null  object        
+ 8   Bank                      1000098 non-null  object        
+ 9   AccountType               1000098 non-null  object        
+ 10  MaritalStatus             1000098 non-null  object        
+ 11  Gender                    1000098 non-null  object        
+ 12  Country                   1000098 non-null  object        
+ 13  Province                  1000098 non-null  object        
+ 14  PostalCode                1000098 non-null  object        
+ 15  MainCrestaZone            1000098 non-null  object        
+ 16  SubCrestaZone             1000098 non-null  object        
+ 17  ItemType                  1000098 non-null  object        
+ 18  mmcode                    1000098 non-null  object        
+ 19  VehicleType               1000098 non-null  object        
+ 20  RegistrationYear          1000098 non-null  int64         
+ 21  make                      1000098 non-null  object        
+ 22  Model                     1000098 non-null  object        
+ 23  Cylinders                 999546 non-null   float64       
+ 24  cubiccapacity             999546 non-null   float64       
+ 25  kilowatts                 999546 non-null   float64       
+ 26  bodytype                  1000098 non-null  object        
+ 27  NumberOfDoors             999546 non-null   float64       
+ 28  VehicleIntroDate          999546 non-null   datetime64[ns]
+ 29  CustomValueEstimate       220456 non-null   float64       
+ 30  AlarmImmobiliser          1000098 non-null  object        
+ 31  TrackingDevice            1000098 non-null  object        
+ 32  CapitalOutstanding        999776 non-null   float64       
+ 33  NewVehicle                1000098 non-null  object        
+ 34  WrittenOff                1000098 non-null  object        
+ 35  Rebuilt                   1000098 non-null  object        
+ 36  Converted                 1000098 non-null  object        
+ 37  CrossBorder               1000098 non-null  object        
+ 38  NumberOfVehiclesInFleet   0 non-null        float64       
+ 39  SumInsured                1000098 non-null  float64       
+ 40  TermFrequency             0 non-null        float64       
+ 41  CalculatedPremiumPerTerm  1000098 non-null  float64       
+ 42  ExcessSelected            1000098 non-null  object        
+ 43  CoverCategory             1000098 non-null  object        
+ 44  CoverType                 1000098 non-null  object        
+ 45  CoverGroup                1000098 non-null  object        
+ 46  Section                   1000098 non-null  object        
+ 47  Product                   1000098 non-null  object        
+ 48  StatutoryClass            1000098 non-null  object        
+ 49  StatutoryRiskType         1000098 non-null  object        
+ 50  TotalPremium              1000098 non-null  float64       
+ 51  TotalClaims               1000098 non-null  float64       
+dtypes: datetime64[ns](2), float64(12), int64(1), object(37)
+memory usage: 396.8+ MB
