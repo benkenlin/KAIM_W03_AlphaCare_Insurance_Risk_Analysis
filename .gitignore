@@ -46,5 +46,5 @@ data/
 
 # Optional: If you have an 'output/' directory where DVC places processed files or models
 # output/
-# And you want Git to track their corresponding .dvc files:
+# And you want Git to track their corresponding .dvc files (if applicable):
 # !output/**/*.dvc
