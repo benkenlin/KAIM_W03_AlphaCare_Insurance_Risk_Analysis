@@ -1,107 +1,31 @@
 # src/config.py
+
 import os
 
-# Define the base directory of the project
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# --- General Project Settings ---
+RANDOM_STATE = 42 # For reproducibility in random operations
 
-# --- Data Paths ---
-DATA_DIR = os.path.join(BASE_DIR, 'data')
-RAW_DATA_DIR = os.path.join(DATA_DIR, 'raw')
-PROCESSED_DATA_DIR = os.path.join(DATA_DIR, 'processed')
-INTERIM_DATA_DIR = os.path.join(DATA_DIR, 'interim')
-
-# Raw data file
-RAW_DATA_PATH = os.path.join(RAW_DATA_DIR, 'MachineLearning_v3.txt')
-
-# --- Output Paths ---
-OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
-EDA_REPORTS_DIR = os.path.join(OUTPUT_DIR, 'eda_reports')
-HYPOTHESIS_REPORTS_DIR = os.path.join(OUTPUT_DIR, 'hypothesis_reports')
-MODELS_DIR = os.path.join(OUTPUT_DIR, 'models')
-INTERPRETATIONS_DIR = os.path.join(OUTPUT_DIR, 'interpretations')
-
-# Create directories if they don't exist
-os.makedirs(RAW_DATA_DIR, exist_ok=True)
-os.makedirs(PROCESSED_DATA_DIR, exist_ok=True)
-os.makedirs(INTERIM_DATA_DIR, exist_ok=True)
-os.makedirs(EDA_REPORTS_DIR, exist_ok=True)
-os.makedirs(HYPOTHESIS_REPORTS_DIR, exist_ok=True)
-os.makedirs(MODELS_DIR, exist_ok=True)
-os.makedirs(INTERPRETATIONS_DIR, exist_ok=True)
-
-
-# --- Column Names (Ensure these exactly match your data's column names) ---
-# Main target and key financial columns
-TOTAL_PREMIUM_COL = 'TotalPremium'
+# --- Column Names from Raw Data ---
 TOTAL_CLAIMS_COL = 'TotalClaims'
-TRANSACTION_MONTH_COL = 'TransactionMonth'
+TOTAL_PREMIUM_COL = 'TotalPremium'
+POLICY_ID_COL = 'PolicyID'
+TRANSACTION_MONTH_COL = 'TransactionMonth' # Expected format: YYYYMM
 
-# Numerical Features
-NUMERICAL_FEATURES = [
-    'CalculatedPremiumPerTerm',
-    'RegistrationYear',
-    'Cylinders',
-    'cubiccapacity',
-    'kilowatts',
-    'NumberOfDoors',
-    'CustomValueEstimate',
-    'CapitalOutstanding',
-    'NumberOfVehiclesInFleet',
-    'SumInsured',
-    'TermFrequency'
-]
+# --- Derived Metric Names (for clarity and consistency) ---
+CLAIM_PROBABILITY_TARGET = 'HasClaim' # For classification target
+CLAIM_SEVERITY_TARGET = 'TotalClaims' # For regression target (when a claim occurs)
+HAS_CLAIM_COL = 'HasClaim' # Same as CLAIM_PROBABILITY_TARGET, for internal use
+MARGIN_COL = 'Margin'
 
-# Categorical Features
-CATEGORICAL_FEATURES = [
-    'IsVATRegistered',
-    'Citizenship',
-    'LegalType',
-    'Title',
-    'Language',
-    'Bank',
-    'AccountType',
-    'MaritalStatus',
-    'Gender',
-    'Country',
-    'Province',
-    'PostalCode', # Could be numerical or categorical, depends on use
-    'MainCrestaZone',
-    'SubCrestaZone',
-    'ItemType',
-    'mmcode', # Often treated as categorical
-    'VehicleType',
-    'make',
-    'Model',
-    'bodytype',
-    'AlarmImmobiliser',
-    'TrackingDevice',
-    'NewVehicle',
-    'WrittenOff',
-    'Rebuilt',
-    'Converted',
-    'CrossBorder',
-    'ExcessSelected',
-    'CoverCategory',
-    'CoverType',
-    'CoverGroup',
-    'Section',
-    'Product',
-    'StatutoryClass',
-    'StatutoryRiskType'
-]
+# --- File Paths (relative to the project root) ---
 
-# Date Features (columns that need to be parsed as datetime objects)
-DATE_FEATURES = [
-    'TransactionMonth',
-    'VehicleIntroDate'
-]
+# Get the directory of the current script (config.py)
+_current_dir = os.path.dirname(os.path.abspath(__file__))
 
-# --- Specific columns for certain plots/analyses ---
-PROVINCE_COL = 'Province'
-GENDER_COL = 'Gender'
-VEHICLE_TYPE_COL = 'VehicleType'
-CUSTOM_VALUE_ESTIMATE_COL = 'CustomValueEstimate'
-REGISTRATION_YEAR_COL = 'RegistrationYear' # Already in numerical, but good to have explicit name
-SUM_INSURED_COL = 'SumInsured'
-CALCULATED_PREMIUM_PER_TERM_COL = 'CalculatedPremiumPerTerm'
-POSTAL_CODE_COL = 'PostalCode'
+# Construct the path to the project root (one level up from src)
+# This assumes src/config.py is directly inside the 'src' folder which is in the project root.
+_project_root = os.path.abspath(os.path.join(_current_dir, '..'))
+
+# Define paths relative to the project root
+RAW_DATA_PATH = os.path.join(_project_root, 'data', 'raw', 'MachineLearningRating_v3.txt')
+PROCESSED_DATA_PATH = os.path.join(_project_root, 'data', 'processed', 'processed_insurance_data.parquet')
