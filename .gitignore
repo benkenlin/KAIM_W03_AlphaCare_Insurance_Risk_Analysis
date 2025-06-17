@@ -1,9 +1,6 @@
 # Python virtual environment
 .venv/
 
-# Data directory (this will ignore the actual data files, DVC tracks them)
-data/
-
 # macOS system files
 .DS_Store
 
@@ -14,32 +11,40 @@ __pycache__/
 # Environment variables file
 .env
 
-# DVC-related entries
-# Ignore .dvc files for individual tracked files (like data.csv.dvc)
-# This is usually desired, as DVC generates these.
-# We explicitly ensure it's NOT ignored.
+# =======================================
+# DVC-specific entries
+# =======================================
+
+# The core .dvc/ directory at the project root MUST be tracked by Git.
+# It contains DVC's configuration and pipeline files (.dvc/config, .dvc/.gitignore, etc.).
+# We explicitly ensure this directory is NOT ignored.
 !.dvc/
 
-# The .dvc/config file within the .dvc/ directory should also be tracked.
-!.dvc/.gitignore
-!.dvc/config
-
-# Ignore the DVC cache directory (it stores the actual data).
-# This is often large and should not be versioned by Git directly.
+# DVC Cache: This is where the actual data content is stored.
+# It should NOT be tracked by Git as it can be very large.
 .dvc/cache/
 
-# Ignore DVC's local system files
+# Other DVC temporary or local files/directories that Git should ignore
 .dvc/tmp/
 .dvc/plots/
 .dvc/experiments/
-.dvcignore # This is similar to .gitignore but for DVC
+.dvcignore # This is similar to .gitignore, but for DVC's internal ignoring
 
-# EXCEPTION: Do NOT ignore the .dvc/ directory at the project root.
-# This directory contains DVC's internal configuration and pipeline files,
-# which MUST be tracked by Git for reproducibility.
-!.dvc/
+# =======================================
+# Data directories and files managed by DVC
+# =======================================
 
-# Optional: You might want to ignore a specific 'output' directory
-# if you're not tracking its contents with DVC or Git.
-# If 'output' is managed by DVC or part of your Git repo, remove this line.
-output/
+# Ignore the 'data/' directory itself.
+# This prevents Git from tracking the large actual data files (e.g., MachineLearning_v3.txt).
+# The trailing slash ensures it applies to the directory.
+data/
+
+# EXCEPTION: Unignore all .dvc files within the 'data/' directory
+# and its subdirectories. These are the small pointer files that
+# Git *should* track to know about your DVC-managed data.
+!data/**/*.dvc
+
+# Optional: If you have an 'output/' directory where DVC places processed files or models
+# output/
+# And you want Git to track their corresponding .dvc files:
+# !output/**/*.dvc
