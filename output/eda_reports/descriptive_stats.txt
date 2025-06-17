@@ -1,0 +1,15 @@
+Descriptive Statistics for Numerical Features:
+       CalculatedPremiumPerTerm  RegistrationYear      Cylinders  cubiccapacity      kilowatts  NumberOfDoors  CustomValueEstimate  CapitalOutstanding  NumberOfVehiclesInFleet    SumInsured  TermFrequency
+count              1.000098e+06      1.000098e+06  999546.000000  999546.000000  999546.000000  999546.000000         2.204560e+05       999776.000000                      0.0  1.000098e+06            0.0
+mean               1.178757e+02      2.010225e+03       4.046642    2466.743258      97.207919       4.019250         2.255311e+05        52605.220796                      NaN  6.041727e+05            NaN
+std                3.997017e+02      3.261391e+00       0.294020     442.800640      19.393256       0.468314         5.645157e+05       111417.190825                      NaN  1.508332e+06            NaN
+min                0.000000e+00      1.987000e+03       0.000000       0.000000       0.000000       0.000000         2.000000e+04           -2.000000                      NaN  1.000000e-02            NaN
+25%                3.224800e+00      2.008000e+03       4.000000    2237.000000      75.000000       4.000000         1.350000e+05            0.000000                      NaN  5.000000e+03            NaN
+50%                8.436900e+00      2.011000e+03       4.000000    2694.000000     111.000000       4.000000         2.200000e+05            0.000000                      NaN  7.500000e+03            NaN
+75%                9.000000e+01      2.013000e+03       4.000000    2694.000000     111.000000       4.000000         2.800000e+05            0.000000                      NaN  2.500000e+05            NaN
+max                7.442217e+04      2.015000e+03      10.000000   12880.000000     309.000000       6.000000         2.655000e+07       700000.000000                      NaN  1.263620e+07            NaN
+
+Variability (Std Dev, Variance):
+     CalculatedPremiumPerTerm  RegistrationYear  Cylinders  cubiccapacity   kilowatts  NumberOfDoors  CustomValueEstimate  CapitalOutstanding  NumberOfVehiclesInFleet    SumInsured  TermFrequency
+std                399.701721          3.261391   0.294020      442.80064   19.393256       0.468314         5.645157e+05        1.114172e+05                      NaN  1.508332e+06            NaN
+var             159761.465821         10.636674   0.086448   196072.40704  376.098365       0.219318         3.186780e+11        1.241379e+10                      NaN  2.275065e+12            NaN

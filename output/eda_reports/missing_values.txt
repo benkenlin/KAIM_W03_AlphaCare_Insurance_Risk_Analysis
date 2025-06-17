@@ -1,0 +1,11 @@
+Missing Values:
+                         Missing Count  Missing Percentage (%)
+NumberOfVehiclesInFleet        1000098              100.000000
+TermFrequency                  1000098              100.000000
+CustomValueEstimate             779642               77.956560
+Cylinders                          552                0.055195
+cubiccapacity                      552                0.055195
+VehicleIntroDate                   552                0.055195
+NumberOfDoors                      552                0.055195
+kilowatts                          552                0.055195
+CapitalOutstanding                 322                0.032197
