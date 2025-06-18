@@ -1,6 +1,4 @@
 # src/data_preparation.py
-# (Note: Based on your traceback, this file is named data_preprocessing.py in your system)
-# I will refer to it as data_preparation.py for consistency with our previous discussion.
 
 import pandas as pd
 import numpy as np # Make sure numpy is imported for np.nan if used
