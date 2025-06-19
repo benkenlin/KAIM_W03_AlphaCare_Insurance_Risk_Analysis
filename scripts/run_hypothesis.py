@@ -48,14 +48,24 @@ def main():
         'NumberOfDoors', 'NumberOfVehiclesInFleet'
     ]))
     potential_numeric_cols_ht_in_df = [col for col in potential_numeric_cols_ht if col in df_ht.columns]
+
     df_ht = _convert_comma_to_dot_and_numeric(df_ht, potential_numeric_cols_ht_in_df)
 
-    # Apply feature engineering to create derived numerical features like date parts and ages
+    # --- CRITICAL FIX: Explicitly ensure key categorical columns remain string/object ---
+    # This prevents them from being misinterpreted or dropped by intermediate steps
+    # before handle_missing_data can process them as categorical.
+    for col in [DRIVER_GENDER_COL, PROVINCE_COL, POSTAL_CODE_COL]:
+        if col in df_ht.columns:
+            df_ht[col] = df_ht[col].astype(str)
+            # Also clean whitespace and replace 'nan' string values
+            df_ht[col] = df_ht[col].str.strip().replace('nan', np.nan, regex=False)
+        else:
+            print(f"Warning: Critical categorical column '{col}' not found in raw data. May affect hypothesis tests.")
+            
+    # Engineer features (like date components and vehicle age at transaction)
     df_ht = engineer_features(df_ht, DATE_FEATURES_CLASSIFICATION)
 
     # Calculate core risk metrics including HasClaim and Margin.
-    # This function internally handles making these columns correctly, assuming they're derived
-    # after initial numerical conversion of TotalClaims/TotalPremium
     df_metrics = calculate_risk_metrics(df_ht)
 
     # Define the full set of numerical and categorical features expected after initial processing
@@ -69,7 +79,11 @@ def main():
     print("\n--- Data Prepared for Hypothesis Testing ---")
     print(f"Shape of prepared data: {df_prepared_ht.shape}")
     print("Sample data with metrics:")
-    print(df_prepared_ht[[HAS_CLAIM_COL, 'ClaimAmountWhenClaimed', MARGIN_COL, PROVINCE_COL, POSTAL_CODE_COL, DRIVER_GENDER_COL]].head())
+    # Ensure all columns in the .head() print statement are present
+    display_cols = [HAS_CLAIM_COL, 'ClaimAmountWhenClaimed', MARGIN_COL, PROVINCE_COL, POSTAL_CODE_COL, DRIVER_GENDER_COL]
+    # Filter to only show columns that actually exist in the DataFrame
+    existing_display_cols = [col for col in display_cols if col in df_prepared_ht.columns]
+    print(df_prepared_ht[existing_display_cols].head())
 
 
     # --- 2. Perform Hypothesis Tests ---
@@ -215,7 +229,7 @@ def main():
         else:
             print(f"Warning: Genders '{gender1}' or '{gender2}' not found or insufficient data for comparison. Found: {df_prepared_ht[DRIVER_GENDER_COL].unique()}")
     else:
-        print(f"Warning: Column '{DRIVER_GENDER_COL}' not found for gender-based hypothesis testing.")
+        print(f"Warning: Column '{DRIVER_GENDER_COL}' not found for gender-based hypothesis testing. Please check config.py and data.")
 
 
     print("\n--- Hypothesis Testing Pipeline Completed ---")

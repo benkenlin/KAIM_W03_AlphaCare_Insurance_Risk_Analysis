@@ -3,6 +3,7 @@
 import os
 import sys
 import pandas as pd
+import numpy as np # <--- ADDED THIS LINE
 import matplotlib.pyplot as plt
 import seaborn as sns
 
