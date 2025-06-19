@@ -1,58 +1,84 @@
 # src/config.py
+
 import os
 
-# Define the base directory of the project
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# --- General Project Settings ---
+RANDOM_STATE = 42 # For reproducibility in random operations
+TEST_SIZE = 0.2   # Standard test set size for train_test_split (e.g., 20% for testing)
+ALPHA = 0.05      # Significance level for hypothesis testing
 
-# --- Data Paths ---
-DATA_DIR = os.path.join(BASE_DIR, 'data')
-RAW_DATA_DIR = os.path.join(DATA_DIR, 'raw')
-PROCESSED_DATA_DIR = os.path.join(DATA_DIR, 'processed')
-INTERIM_DATA_DIR = os.path.join(DATA_DIR, 'interim')
-
-# Raw data file
-RAW_DATA_PATH = os.path.join(RAW_DATA_DIR, 'MachineLearning_v3.txt')
-
-# --- Output Paths ---
-OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
-EDA_REPORTS_DIR = os.path.join(OUTPUT_DIR, 'eda_reports')
-HYPOTHESIS_REPORTS_DIR = os.path.join(OUTPUT_DIR, 'hypothesis_reports')
-MODELS_DIR = os.path.join(OUTPUT_DIR, 'models')
-INTERPRETATIONS_DIR = os.path.join(OUTPUT_DIR, 'interpretations')
-
-# Create directories if they don't exist
-os.makedirs(RAW_DATA_DIR, exist_ok=True)
-os.makedirs(PROCESSED_DATA_DIR, exist_ok=True)
-os.makedirs(INTERIM_DATA_DIR, exist_ok=True)
-os.makedirs(EDA_REPORTS_DIR, exist_ok=True)
-os.makedirs(HYPOTHESIS_REPORTS_DIR, exist_ok=True)
-os.makedirs(MODELS_DIR, exist_ok=True)
-os.makedirs(INTERPRETATIONS_DIR, exist_ok=True)
-
-
-# --- Column Names (Ensure these exactly match your data's column names) ---
-# Main target and key financial columns
-TOTAL_PREMIUM_COL = 'TotalPremium'
+# --- Column Names from Raw Data ---
+# These should match the column names in your 'MachineLearningRating_v3.txt'
 TOTAL_CLAIMS_COL = 'TotalClaims'
-TRANSACTION_MONTH_COL = 'TransactionMonth'
+TOTAL_PREMIUM_COL = 'TotalPremium'
+POLICY_ID_COL = 'PolicyID'
+TRANSACTION_MONTH_COL = 'TransactionMonth' # Expected format: YYYY-MM-DD HH:MM:SS or similar
+DRIVER_GENDER_COL = 'DriverGender'
+PROVINCE_COL = 'Province'
+POSTAL_CODE_COL = 'PostalCode' # For zip code analysis
 
-# Numerical Features
-NUMERICAL_FEATURES = [
-    'CalculatedPremiumPerTerm',
-    'RegistrationYear',
-    'Cylinders',
-    'cubiccapacity',
-    'kilowatts',
-    'NumberOfDoors',
+# --- Derived Metric Names (for clarity and consistency) ---
+CLAIM_PROBABILITY_TARGET = 'HasClaim' # For classification target
+CLAIM_SEVERITY_TARGET = 'TotalClaims' # For regression target (when a claim occurs)
+HAS_CLAIM_COL = 'HasClaim' # Same as CLAIM_PROBABILITY_TARGET, for internal use
+MARGIN_COL = 'Margin'      # TotalPremium - TotalClaims
+
+# --- File Paths (relative to the the project root) ---
+
+# Get the directory of the current script (config.py)
+_current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Construct the path to the project root (one level up from src)
+# This assumes src/config.py is directly inside the 'src' folder which is in the project root.
+PROJECT_ROOT = os.path.abspath(os.path.join(_current_dir, '..'))
+
+# Define a data directory within the project root
+DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
+
+# Paths for raw and processed data files
+RAW_DATA_PATH = os.path.join(DATA_DIR, 'raw', 'MachineLearningRating_v3.txt')
+PROCESSED_DATA_PATH = os.path.join(DATA_DIR, 'processed', 'processed_insurance_data.parquet')
+
+# Path for saving trained models and preprocessors
+MODEL_DIR = os.path.join(PROJECT_ROOT, 'models')
+
+
+# --- Feature Lists for Modeling ---
+# These lists define which columns are used as numerical, categorical, and date features.
+# Adjust these based on your actual dataset columns and your feature engineering strategy.
+
+# Features for Claim Probability (Classification) Model
+NUMERICAL_FEATURES_CLASSIFICATION = [
+    'TotalPremium',
+    'SumInsured',
     'CustomValueEstimate',
     'CapitalOutstanding',
-    'NumberOfVehiclesInFleet',
-    'SumInsured',
-    'TermFrequency'
+    'CalculatedPremiumPerTerm',
+    'Age',
+    'VehicleAge',
+    MARGIN_COL, # Engineered feature
+    'RegistrationYear', # Treat as numerical, will be coerced
+    'Cylinders',        # Treat as numerical, will be coerced
+    'cubiccapacity',    # Treat as numerical, will be coerced
+    'kilowatts',        # Treat as numerical, will be coerced
+    'NumberOfDoors',    # Treat as numerical, will be coerced
+    'NumberOfVehiclesInFleet', # Treat as numerical, will be coerced
+    # Engineered date features like 'TransactionMonth_Year', 'TransactionMonth_Month',
+    # 'VehicleIntroDate_Year', 'VehicleIntroDate_Month' will be added dynamically.
+    # 'VehicleAge_at_Transaction', # Engineered feature
+    # 'PremiumPerSumInsured' # Engineered feature
 ]
 
-# Categorical Features
-CATEGORICAL_FEATURES = [
+CATEGORICAL_FEATURES_CLASSIFICATION = [
+    'PolicyType',
+    DRIVER_GENDER_COL, # 'DriverGender'
+    'VehicleType',
+    'Geolocation',
+    'FuelType',
+    'VehicleSegment',
+    PROVINCE_COL, # 'Province'
+    POSTAL_CODE_COL, # 'PostalCode'
+    # Additional categorical features identified from raw data
     'IsVATRegistered',
     'Citizenship',
     'LegalType',
@@ -63,13 +89,10 @@ CATEGORICAL_FEATURES = [
     'MaritalStatus',
     'Gender',
     'Country',
-    'Province',
-    'PostalCode', # Could be numerical or categorical, depends on use
     'MainCrestaZone',
     'SubCrestaZone',
     'ItemType',
-    'mmcode', # Often treated as categorical
-    'VehicleType',
+    'mmcode', # Treat as categorical (often codes)
     'make',
     'Model',
     'bodytype',
@@ -80,6 +103,7 @@ CATEGORICAL_FEATURES = [
     'Rebuilt',
     'Converted',
     'CrossBorder',
+    'TermFrequency',
     'ExcessSelected',
     'CoverCategory',
     'CoverType',
@@ -90,18 +114,20 @@ CATEGORICAL_FEATURES = [
     'StatutoryRiskType'
 ]
 
-# Date Features (columns that need to be parsed as datetime objects)
-DATE_FEATURES = [
-    'TransactionMonth',
+DATE_FEATURES_CLASSIFICATION = [
+    TRANSACTION_MONTH_COL, # 'TransactionMonth'
     'VehicleIntroDate'
 ]
 
-# --- Specific columns for certain plots/analyses ---
-PROVINCE_COL = 'Province'
-GENDER_COL = 'Gender'
-VEHICLE_TYPE_COL = 'VehicleType'
-CUSTOM_VALUE_ESTIMATE_COL = 'CustomValueEstimate'
-REGISTRATION_YEAR_COL = 'RegistrationYear' # Already in numerical, but good to have explicit name
-SUM_INSURED_COL = 'SumInsured'
-CALCULATED_PREMIUM_PER_TERM_COL = 'CalculatedPremiumPerTerm'
-POSTAL_CODE_COL = 'PostalCode'
+COLS_TO_DROP_CLASSIFICATION = [
+    POLICY_ID_COL # Drop policy ID as it's an identifier and not a feature
+    # 'UnderwrittenCoverID' # Also an ID, can be dropped if not needed for specific lookup
+    # Add other columns here that are not features or targets (e.g., specific metadata)
+]
+
+# Features for Claim Severity (Regression) Model - often the same as classification features
+NUMERICAL_FEATURES_REGRESSION = NUMERICAL_FEATURES_CLASSIFICATION[:] # Copy list
+CATEGORICAL_FEATURES_REGRESSION = CATEGORICAL_FEATURES_CLASSIFICATION[:] # Copy list
+DATE_FEATURES_REGRESSION = DATE_FEATURES_CLASSIFICATION[:] # Copy list
+COLS_TO_DROP_REGRESSION = COLS_TO_DROP_CLASSIFICATION[:] # Copy list
+
